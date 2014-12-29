@@ -64,7 +64,7 @@ class ControllerModuleTawkto extends Controller {
 		$this->setup();
 
 		$currentSettings = $this->model_setting_setting->getSetting('tawkto');
-		$currentSettings['tawkto_widget'] = isset($currentSettings['tawkto_widget']) ? $currentSettings['tawkto_widget'] : [];
+		$currentSettings['tawkto_widget'] = isset($currentSettings['tawkto_widget']) ? $currentSettings['tawkto_widget'] : array();
 
 		$currentSettings['tawkto_widget']['widget_settings_for_'.$_POST['id']] = array(
 			'page_id' => $_POST['pageId'],
@@ -139,7 +139,7 @@ class ControllerModuleTawkto extends Controller {
 		$this->layouts         = $this->model_design_layout->getLayouts();
 		$this->languages       = $this->model_localisation_language->getLanguages();
 		$settings              = $this->model_setting_setting->getSetting('tawkto');
-		$this->currentSettings = isset($settings['tawkto_widget']) ? $settings['tawkto_widget'] : [];
+		$this->currentSettings = isset($settings['tawkto_widget']) ? $settings['tawkto_widget'] : array();
 
 		$hierarchy = array();
 
