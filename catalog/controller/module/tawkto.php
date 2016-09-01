@@ -28,7 +28,7 @@ class ControllerModuleTawkto extends Controller {
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/tawkto/widget.tpl')) {
 			$this->template = $this->config->get('config_template') . '/template/tawkto/widget.tpl';
 		} else {
-			$this->template = 'default/template/tawkto/widget.tpl';
+			$this->template = 'tawkto/widget.tpl';
 		}
 
 		$data['page_id'] = $widget['page_id'];
