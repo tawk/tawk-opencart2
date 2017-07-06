@@ -247,11 +247,14 @@ class ControllerExtensionModuleTawkto extends Controller {
 
         $hierarchy = array();
 
+        // we need to remove childs as these prevent us from monitoring user
+        // and user's custom attributes as he/she navigates in store
         $hierarchy[] = array(
             'id'      => '0',
             'name'    => 'Default store',
             'current' => $this->getCurrentSettingsFor('0'),
-            'childs'  => $this->getLanguageHierarchy('0')
+            // 'childs'  => $this->getLanguageHierarchy('0')
+            'childs'  => array()
         );
 
         foreach($stores as $store) {
@@ -259,7 +262,8 @@ class ControllerExtensionModuleTawkto extends Controller {
                 'id'      => $store['store_id'],
                 'name'    => $store['name'],
                 'current' => $this->getCurrentSettingsFor($store['store_id']),
-                'childs'  => $this->getLanguageHierarchy($store['store_id'])
+                // 'childs'  => $this->getLanguageHierarchy($store['store_id'])
+                'childs'  => array()
             );
         }
 
