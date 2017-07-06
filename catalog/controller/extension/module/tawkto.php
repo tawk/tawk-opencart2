@@ -15,19 +15,54 @@ class ControllerExtensionModuleTawkto extends Controller {
         if(self::$displayed) {
             return;
         }
-
-        self::$displayed = TRUE;
+        self::$displayed = true;
 
         $widget = $this->getWidget();
-
         if($widget === null) {
             echo '';
             return;
         }
 
+        $data = array();
         $data['page_id'] = $widget['page_id'];
         $data['widget_id'] = $widget['widget_id'];
-        $data['customer'] = $this->customer;
+        $data['current_page'] = htmlspecialchars_decode('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+        $data['cart_data'] = $this->cart->getProducts();
+        
+        $data['customer'] = array();
+        if (!is_null($this->customer->getId())) {
+            $customer = $this->customer;
+            $address = $this->db->query("SELECT * FROM " . DB_PREFIX . "address WHERE customer_id = '" . (int)$this->customer->getId() . "' LIMIT 1");
+
+            $country = $this->db->query("SELECT * FROM " . DB_PREFIX . "country WHERE country_id = '" . (int)$address->row['country_id'] . "' LIMIT 1");
+            $address->row['country'] = $country->row;
+            
+            $customer->address = $address->row;
+            $data['customer'] = $customer;
+        }
+
+        $data['orders'] = array();
+        $this->load->model('account/order');
+        $page = 1;
+        $results = $this->model_account_order->getOrders(($page - 1) * 10, 10);
+        if (!empty($results)) {
+            $result = current($results);
+            // foreach ($results as $result) {
+                $product_total = $this->model_account_order->getTotalOrderProductsByOrderId($result['order_id']);
+                $voucher_total = $this->model_account_order->getTotalOrderVouchersByOrderId($result['order_id']);
+
+                $data['orders'] = array(
+                    'order_id'   => $result['order_id'],
+                    // 'name'       => $result['firstname'] . ' ' . $result['lastname'],
+                    'status'     => $result['status'],
+                    'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+                    'products'   => ($product_total + $voucher_total),
+                    'total'      => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+                    'href'       => htmlspecialchars_decode($this->url->link('account/order/info', 'order_id=' . $result['order_id'], 'SSL')),
+                    // 'reorder'    => $this->url->link('account/order', 'order_id=' . $result['order_id'], 'SSL')
+                );
+            // }
+        }
 
         return $this->load->view('extension/module/tawkto', $data);
     }
@@ -37,17 +72,18 @@ class ControllerExtensionModuleTawkto extends Controller {
 
         $storeId = $this->config->get('config_store_id');
         $settings = $this->model_setting_setting->getSetting('tawkto', $storeId);
-        
         $languageId = $this->config->get('config_language_id');
         $layoutId = $this->getLayoutId();
 
         $widget = null;
-
         if(!isset($settings['tawkto_widget'])) {
             return null;
         }
 
-        $visibility = $settings['tawkto_visibility'];
+        $visibility = false;
+        if (isset($settings['tawkto_visibility'])) {
+            $visibility = $settings['tawkto_visibility'];
+        }
         $settings = $settings['tawkto_widget'];
 
         if(isset($settings['widget_settings_for_'.$storeId])) {
@@ -89,11 +125,11 @@ class ControllerExtensionModuleTawkto extends Controller {
                 }
 
                 // category page
-                if (stripos($this->request->get['route'], 'category')!==false) {
+                if (isset($this->request->get['route']) && stripos($this->request->get['route'], 'category')!==false) {
                     if (false==$visibility->show_oncategory) {
                         return;
                     }
-                }                
+                }
                 
                 // custom pages
                 $show_pages = json_decode($visibility->show_oncustom);
