@@ -171,6 +171,7 @@ window.addEventListener('message', function(e) {
 });
 
 function setTawkWidget(e) {
+    var store_layout = e.data.id;
     jQuery.post('<?php echo $url['set_widget_url']; ?>', {
         pageId   : e.data.pageId,
         widgetId : e.data.widgetId,
@@ -193,6 +194,7 @@ function setTawkWidget(e) {
 }
 
 function removeTawkWidget(e) {
+    var store_layout = e.data.id;
     jQuery.post('<?php echo $url['remove_widget_url']; ?>', {
         id : e.data.id,
         store : parseInt(store_layout),
