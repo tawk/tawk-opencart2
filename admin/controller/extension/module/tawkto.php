@@ -53,7 +53,7 @@ class ControllerExtensionModuleTawkto extends Controller {
         if (isset($data['widget_config']['user_id'])) {
             $data['same_user']  = ($data['widget_config']['user_id']==$this->session->data['user_id']);
         }
-        
+
         $data['display_opts']  = $this->getDisplayOpts($store_id);
         $data['store_id']  = $store_id;
         $data['store_layout_id']  = $store_id; // set default to 0
@@ -71,12 +71,12 @@ class ControllerExtensionModuleTawkto extends Controller {
                 'page_id' => null,
                 'widget_id' => null
             );
-        
+
         $current_settings = $this->model_setting_setting->getSetting('tawkto', $store_id);
         if (isset($current_settings['tawkto_widget']['widget_config_'.$store_id])) {
             $config = $current_settings['tawkto_widget']['widget_config_'.$store_id];
         }
-        
+
         return $config;
     }
 
@@ -95,7 +95,7 @@ class ControllerExtensionModuleTawkto extends Controller {
             $options = $current_settings['tawkto_visibility'];
             $options = json_decode($options,true);
         }
-        
+
         return $options;
     }
 
@@ -140,7 +140,7 @@ class ControllerExtensionModuleTawkto extends Controller {
                         $value = (empty($value)||!$value)?array():$value;
                         $jsonOpts[$column] = json_encode($value);
                         break;
-                    
+
                     case 'show_onfrontpage':
                     case 'show_oncategory':
                     case 'show_onproduct':
@@ -172,7 +172,7 @@ class ControllerExtensionModuleTawkto extends Controller {
 
         $this->setup();
 
-        $currentSettings = $this->model_setting_setting->getSetting('tawkto');
+        $currentSettings = $this->model_setting_setting->getSetting('tawkto', $_POST['store']);
         $currentSettings['tawkto_widget'] = isset($currentSettings['tawkto_widget']) ? $currentSettings['tawkto_widget'] : array();
 
         $currentSettings['tawkto_widget']['widget_config_'.$_POST['id']] = array(
@@ -181,7 +181,7 @@ class ControllerExtensionModuleTawkto extends Controller {
             'user_id' => $this->session->data['user_id']
         );
 
-        $this->model_setting_setting->editSetting('tawkto', $currentSettings);
+        $this->model_setting_setting->editSetting('tawkto', $currentSettings, $_POST['store']);
 
         echo json_encode(array('success' => TRUE));
         die();
@@ -200,7 +200,7 @@ class ControllerExtensionModuleTawkto extends Controller {
         $currentSettings = $this->model_setting_setting->getSetting('tawkto');
         unset($currentSettings['tawkto_widget']['widget_config_'.$_POST['id']]);
 
-        $this->model_setting_setting->editSetting('tawkto', $currentSettings);
+        $this->model_setting_setting->editSetting('tawkto', $currentSettings, $_POST['id']);
 
         echo json_encode(array('success' => TRUE));
         die();
@@ -247,9 +247,6 @@ class ControllerExtensionModuleTawkto extends Controller {
         $stores                = $this->model_setting_store->getStores();
         $this->layouts         = $this->model_design_layout->getLayouts();
         $this->languages       = $this->model_localisation_language->getLanguages();
-        $settings              = $this->model_setting_setting->getSetting('tawkto');
-        $this->currentSettings = isset($settings['tawkto_widget']) ? $settings['tawkto_widget'] : array();
-
         $hierarchy = array();
 
         // we need to remove childs as these prevent us from monitoring user
@@ -257,8 +254,7 @@ class ControllerExtensionModuleTawkto extends Controller {
         $hierarchy[] = array(
             'id'      => '0',
             'name'    => 'Default store',
-            'current' => $this->getCurrentSettingsFor('0'),
-            // 'childs'  => $this->getLanguageHierarchy('0')
+            'current' => $this->getCurrentSettingsFor(0),
             'childs'  => array()
         );
 
@@ -267,7 +263,6 @@ class ControllerExtensionModuleTawkto extends Controller {
                 'id'      => $store['store_id'],
                 'name'    => $store['name'],
                 'current' => $this->getCurrentSettingsFor($store['store_id']),
-                // 'childs'  => $this->getLanguageHierarchy($store['store_id'])
                 'childs'  => array()
             );
         }
@@ -328,6 +323,8 @@ class ControllerExtensionModuleTawkto extends Controller {
      * @return Array
      */
     private function getCurrentSettingsFor($id) {
+        $this->currentSettings = $this->model_setting_setting->getSetting('tawkto', $id);
+
         if(isset($this->currentSettings['tawkto_widget']['widget_config_'.$id])) {
             $settings = $this->currentSettings['tawkto_widget']['widget_config_'.$id];
 
