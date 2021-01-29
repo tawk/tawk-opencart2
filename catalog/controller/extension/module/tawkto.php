@@ -1,9 +1,8 @@
 <?php
-
 /**
- * @package Tawk.to Integration
- * @author Tawk.to
- * @copyright (C) 2014- Tawk.to
+ * @package tawk.to Integration
+ * @author tawk.to
+ * @copyright (C) 2021 tawk.to
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
@@ -18,6 +17,8 @@ class ControllerExtensionModuleTawkto extends Controller {
         self::$displayed = true;
 
         $widget = $this->getWidget();
+        $settings = json_decode($this->getVisibilitySettings());
+
         if($widget === null) {
             echo '';
             return;
@@ -30,6 +31,15 @@ class ControllerExtensionModuleTawkto extends Controller {
         $data['cart_data'] = array();
         $data['customer'] = array();
         $data['orders'] = array();
+        $data['can_monitor_customer_cart'] = false;
+
+        if (!is_null($this->customer->getId())) {
+            $data['customer'] = $this->customer;
+        }
+
+        if (!is_null($settings) && !is_null($settings->monitor_customer_cart)) {
+            $data['can_monitor_customer_cart'] = $settings->monitor_customer_cart;
+        }
 
         return $this->load->view('extension/module/tawkto', $data);
     }
@@ -51,6 +61,7 @@ class ControllerExtensionModuleTawkto extends Controller {
         if (isset($settings['tawkto_visibility'])) {
             $visibility = $settings['tawkto_visibility'];
         }
+
         $settings = $settings['tawkto_widget'];
 
         if(isset($settings['widget_config_'.$storeId])) {
@@ -75,7 +86,7 @@ class ControllerExtensionModuleTawkto extends Controller {
                 $request_uri = substr($request_uri, 1);
             }
             $current_page = $this->config->get('config_url').$request_uri;
-            
+
             if (false==$visibility->always_display) {
 
                 // custom pages
@@ -98,7 +109,7 @@ class ControllerExtensionModuleTawkto extends Controller {
                     // $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
 
                     $slug = addslashes($slug);
-                    
+
                     // $slug = urlencode($slug);
                     if (stripos($current_page, $slug)!==false || trim($slug)==trim($current_page)) {
                         $show = true;
@@ -115,17 +126,17 @@ class ControllerExtensionModuleTawkto extends Controller {
 
                 // home
                 $is_home = false;
-                if (!isset($this->request->get['route']) 
+                if (!isset($this->request->get['route'])
                     || (isset($this->request->get['route']) && $this->request->get['route'] == 'common/home')) {
                     $is_home = true;
                 }
-                
+
                 if ($is_home) {
                     if (false!=$visibility->show_onfrontpage) {
                         $show = true;
-                    }                
+                    }
                 }
-                
+
 
                 if (!$show) {
                     return;
@@ -134,7 +145,7 @@ class ControllerExtensionModuleTawkto extends Controller {
             } else {
                 $hide_pages = json_decode($visibility->hide_oncustom);
                 $show = true;
-                
+
                 // $current_page = urlencode($current_page);
                 $current_page = (string) $current_page;
                 foreach ($hide_pages as $slug) {
@@ -168,6 +179,18 @@ class ControllerExtensionModuleTawkto extends Controller {
         }
 
         return $widget;
+    }
+
+    private function getVisibilitySettings() {
+        $this->load->model('setting/setting');
+
+        $storeId = $this->config->get('config_store_id');
+        $settings = $this->model_setting_setting->getSetting('tawkto', $storeId);
+        if (!isset($settings['tawkto_visibility'])) {
+            return null;
+        }
+
+        return $settings['tawkto_visibility'];
     }
 
     private function getLayoutId() {

@@ -1,13 +1,13 @@
 <?php
 /**
- * @package Tawk.to Integration
- * @author Tawk.to
- * @copyright (C) 2014- Tawk.to
+ * @package tawk.to Integration
+ * @author tawk.to
+ * @copyright (C) 2021 tawk.to
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
 // Heading
-$_['heading_title']       = 'Tawk.to';
+$_['heading_title']       = 'tawk.to';
 
 // Text
 $_['text_extension']      = 'Extensions';

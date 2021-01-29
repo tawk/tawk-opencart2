@@ -1,8 +1,8 @@
 <?php
 /**
- * @package Tawk.to Integration
- * @author Tawk.to
- * @copyright (C) 2014- Tawk.to
+ * @package tawk.to Integration
+ * @author tawk.to
+ * @copyright (C) 2021 tawk.to
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
@@ -89,11 +89,16 @@ class ControllerExtensionModuleTawkto extends Controller {
                 'hide_oncustom' => array(),
                 'show_onfrontpage' => false,
                 'show_oncategory' => false,
-                'show_oncustom' => array()
+                'show_oncustom' => array(),
+                'monitor_customer_cart' => false,
             );
         if (isset($current_settings['tawkto_visibility'])) {
             $options = $current_settings['tawkto_visibility'];
             $options = json_decode($options,true);
+
+            if (!isset($options['monitor_customer_cart']) || is_null($options['monitor_customer_cart'])) {
+                $options['monitor_customer_cart'] = false;
+            }
         }
 
         return $options;
@@ -121,6 +126,7 @@ class ControllerExtensionModuleTawkto extends Controller {
                 'show_oncategory' => false,
                 'show_onproduct' => false,
                 'show_oncustom' => array(),
+                'monitor_customer_cart' => false
             );
 
         if (isset($_REQUEST['options']) && !empty($_REQUEST['options'])) {
@@ -145,7 +151,7 @@ class ControllerExtensionModuleTawkto extends Controller {
                     case 'show_oncategory':
                     case 'show_onproduct':
                     case 'always_display':
-                    // default:
+                    case 'monitor_customer_cart':
                         $jsonOpts[$column] = ($value==1)?true:false;
                         break;
                 }
