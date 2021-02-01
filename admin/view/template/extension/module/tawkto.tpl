@@ -1,8 +1,8 @@
 <?php
 /**
- * @package Tawk.to Integration
- * @author Tawk.to
- * @copyright (C) 2014- Tawk.to
+ * @package tawk.to Integration
+ * @author tawk.to
+ * @copyright (C) 2021 tawk.to
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 ?><?php echo $header; ?>
@@ -11,6 +11,28 @@
 .form-group + .form-group {
     border: none;
     margin: 0px 0;
+}
+.attrib_desc {
+    color: #aaa;
+    font-weight: normal;
+    font-size: 13px;
+    font-style: italic;
+}
+
+#optionsSuccessMessage {
+    position: absolute;
+    background-color: #dff0d8;
+    color: #3c763d;
+    border-color: #d6e9c6;
+    font-weight: bold;
+    display: none;
+}
+
+@media only screen and (max-width: 1200px) {
+    #optionsSuccessMessage {
+        position: relative;
+        margin-top: 1rem;
+    }
 }
 </style>
 <?php echo $column_left; ?>
@@ -55,16 +77,10 @@
                             <div class="panel-heading"><strong>Visibility Settings</strong></div>
                         </div>
                         <div class="form-group col-lg-12">
-                            <label for="always_display" class="col-lg-6 control-label">Always show Tawk.To widget on every page</label>
+                            <label for="always_display" class="col-lg-6 control-label">Always show tawk.to widget on every page</label>
                             <div class="col-lg-6 control-label ">
-                                <?php
-                                $checked = true;
-                                if (!$display_opts['always_display']) {
-                                    $checked = false;
-                                }
-                                ?>
-                                <input type="checkbox" class="col-lg-6" name="always_display" 
-                                    id="always_display" value="1" <?php echo ($checked)?'checked':'';?> />
+                                <input type="checkbox" class="col-lg-6" name="always_display"
+                                    id="always_display" value="1" <?php echo ($display_opts['always_display'])?'checked':'';?> />
                             </div>
                         </div>
                         <div class="form-group col-lg-12">
@@ -72,7 +88,7 @@
                             <div class="col-lg-6 control-label">
                                 <?php if (!empty($display_opts['hide_oncustom'])) : ?>
                                     <?php $whitelist = json_decode($display_opts['hide_oncustom']) ?>
-                                    <textarea class="form-control hide_specific" name="hide_oncustom" 
+                                    <textarea class="form-control hide_specific" name="hide_oncustom"
                                         id="hide_oncustom" cols="30" rows="10"><?php foreach ($whitelist as $page) { echo $page."\r\n"; } ?></textarea>
                                 <?php else : ?>
                                     <textarea class="form-control hide_specific" name="hide_oncustom" id="hide_oncustom" cols="30" rows="10"></textarea>
@@ -87,28 +103,16 @@
                         <div class="form-group col-lg-12">
                             <label for="show_onfrontpage" class="col-lg-6 control-label">Show on frontpage</label>
                             <div class="col-lg-6 control-label ">
-                                <?php
-                                $checked = false;
-                                if ($display_opts['show_onfrontpage']) {
-                                    $checked = true;
-                                }
-                                ?>
-                                <input type="checkbox" class="col-lg-6 show_specific" name="show_onfrontpage" 
-                                    id="show_onfrontpage" value="1" 
-                                    <?php echo ($checked)?'checked':'';?> />
+                                <input type="checkbox" class="col-lg-6 show_specific" name="show_onfrontpage"
+                                    id="show_onfrontpage" value="1"
+                                    <?php echo ($display_opts['show_onfrontpage'])?'checked':'';?> />
                             </div>
                         </div>
                         <div class="form-group col-lg-12">
                             <label for="show_oncategory" class="col-lg-6 control-label">Show on category pages</label>
                             <div class="col-lg-6 control-label ">
-                                <?php
-                                $checked = false;
-                                if ($display_opts['show_oncategory']) {
-                                    $checked = true;
-                                }
-                                ?>
-                                <input type="checkbox" class="col-lg-6 show_specific" name="show_oncategory" id="show_oncategory" value="1" 
-                                    <?php echo ($checked)?'checked':'';?>  />
+                                <input type="checkbox" class="col-lg-6 show_specific" name="show_oncategory" id="show_oncategory" value="1"
+                                    <?php echo ($display_opts['show_oncategory'])?'checked':'';?>  />
                             </div>
                         </div>
                         <div class="form-group col-lg-12">
@@ -116,7 +120,7 @@
                             <div class="col-lg-6 control-label">
                                 <?php if (!empty($display_opts['show_oncustom'])) : ?>
                                     <?php $whitelist = json_decode($display_opts['show_oncustom']) ?>
-                                    <textarea class="form-control show_specific" name="show_oncustom" 
+                                    <textarea class="form-control show_specific" name="show_oncustom"
                                         id="show_oncustom" cols="30" rows="10"><?php foreach ($whitelist as $page) { echo $page."\r\n"; } ?></textarea>
                                 <?php else : ?>
                                     <textarea class="form-control show_specific" name="show_oncustom" id="show_oncustom" cols="30" rows="10"></textarea>
@@ -128,15 +132,34 @@
                                 </p>
                             </div>
                         </div>
-                        <div style="position: relative; overflow: hidden; width: 100%; padding: 5px 0;">
-                            <div id="optionsSuccessMessage" style="position:absolute;top:0;left;0;background-color: #dff0d8; color: #3c763d; border-color: #d6e9c6; font-weight: bold; display: none;" class="alert alert-success col-lg-5">Successfully set widget options to your site</div>
-                            <label for="show_oncustom" class="col-lg-5 control-label"></label>
-                            <div class="form-group col-lg-3">
-                                <button type="submit" value="1" id="module_form_submit_btn" name="submitBlockCategories" class="btn btn-default pull-right"><i class="process-icon-save"></i> Save</button>    
+                        <br><br>
+                        <div class="col-lg-12">
+                            <div class="panel-heading"><strong>Cart Integration</strong></div>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="monitor_customer_cart" class="col-lg-6 control-label">
+                            Monitor items added to cart
+                            <br>
+                            <span class="attrib_desc">Enable sending of product details to tawk.to dashboard when an item is added to cart.</span>
+                            </label>
+                            <div class="col-lg-6 control-label ">
+                                <input type="checkbox" class="col-lg-6 " name="monitor_customer_cart" id="monitor_customer_cart" value="1"
+                                    <?php echo ($display_opts['monitor_customer_cart'])?'checked':'';?>  />
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <div class="col-lg-6 col-xs-12">
+                                <button type="submit" value="1" id="module_form_submit_btn" name="submitBlockCategories" class="btn btn-default pull-right"><i class="process-icon-save"></i> Save</button>
+                            </div>
+                            <div class="col-lg-6 col-xs-12">
+                                <div id="optionsSuccessMessage"
+                                    class="alert alert-success col-lg-12">
+                                    Successfully set widget options to your site
+                                </div>
                             </div>
                         </div>
                     </form>
-                    
+
                 </div>
                 <div class="col-lg-4"></div>
             </div>
