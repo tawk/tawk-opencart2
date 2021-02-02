@@ -1,2 +1,0 @@
-Opencart 2 plugin tested for versions :
-1. 2.3.0.2
