@@ -1,51 +1,57 @@
-=== tawk.to Live Chat ===
+# tawk.to Live Chat
 
 Free live chat widget for your site
 
 This module is for Opencart 2.3.x
 
-== Description ==
+## Description
 
-tawk.to is a free live chat app that lets you monitor and  chat  with  visitors on your website  or from a free customizable page. No catch. No spam. No wares. It's truly free and always will be.
+The tawk.to Live Chat app lets you monitor and chat with visitors on your OpenCart site. Be there when they need you with unlimited messaging, ticketing and your own Knowledge Base — all 100% FREE.
 
-No account? Create one here: https://www.tawk.to/?utm_source=opencart&utm_medium=link&utm_campaign=signup
+Don’t have an account yet? Create one here: https://tawk.to/?utm_source=opencart&utm_medium=link&utm_campaign=signup
 
-== Installation ==
-
+## Installation
 This section describes how to install the plugin and get it working.
 
-1. Download and extract the tawkto2.3.x.zip
-2. Copy all the required files
-    admin/controller/extension/module/tawkto.php -> <opencart folder>/admin/controller/extension/module/
-    admin/language/english/extension/module/tawkto.php -> <opencart folder>/admin/language/<language you are using>/extension/module/
-    admin/view/image/tawkto/ -> <opencart folder>/admin/view/image/
-    admin/view/template/extension/module/tawkto.tpl -> <opencart folder>/admin/view/template/extension/module/
+### Adding the module
 
-    catalog/controller/extension/module/tawkto.php -> <opencart folder>/catalog/controller/extension/module/tawkto.php
-    catalog/view/theme/default/template/extension/module/tawkto.tpl -> <opencart folder>/catalog/view/theme/<theme you are using>/template/extension/module/tawkto.tpl
+#### Extension Installer
+1. Download the plugin ending in `.ocmod.zip` from the OpenCart Marketplace.
+2. Go to Extensions -> Extension Installer and upload the zip file.
 
-3. Install extension from Extensions > Modules menu
-4. Go to Extension -> Modules -> Tawk.to -> Edit and choose widget you want to use, you can choose different widgets for different stores
-and also different widgets for different layouts
+#### Manual Installation
+1. Download the plugin ending in `.zip` from the OpenCart Marketplace.
+2. Extract the zip file and copy the files into your OpenCart folder. Then copy the Admin and Catalog folders and paste them into the opencart folder.
 
-Note: You will need a free tawk.to account to generate the embed code, create one here : https://www.tawk.to/?utm_source=opencart&utm_medium=link&utm_campaign=signup
+> If you aren’t using the English language for the OpenCart admin area, copy the language file into the correct language folder. If you are not using the default OpenCart theme, be sure to paste tawkto.tpl in the correct theme folder.
 
+* admin/controller/extension/module/tawkto.php -> `<opencart_folder>`/admin/controller/extension/module/
+* admin/language/english/extension/module/tawkto.php -> `<opencart_folder>`/admin/language/`<your_language>`/extension/module/
+* admin/view/image/tawkto/ -> `<opencart_folder>`/admin/view/image/
+* admin/view/template/extension/module/tawkto.tpl -> `<opencart_folder>`/admin/view/template/extension/module/
+* catalog/controller/extension/module/tawkto.php -> `<opencart_folder>`/catalog/controller/extension/module/tawkto.php
+* catalog/view/theme/default/template/extension/module/tawkto.tpl -> `<opencart_folder>`/catalog/view/theme/`<your_theme>`/template/extension/module/tawkto.tpl
 
-== Changelog ==
+### Widget Configuration
+1. Go to the Modules section in the Extensions and install the tawk.to plugin there.
+2. After installing, click the Edit button.
+3. Log in to your tawk.to account.
+4. Select the property the widget you want to place on your store and click the Use selected widget button.
+5. The widget will now appear on your store.
 
-= 1.3.0 =
+## Frequently Asked Questions
+Visit our [Help Center](https://help.tawk.to/) for answers to FAQs
+
+## Changelog
+
+### 1.3.0
 * Added monitoring of cart item option to tawk.to module config page.
 
-= 1.2.0 =
+### 1.2.0
 * Added visibility options to tawk.to module config page, to control the display of the chat widget in the frontend
 
-= 1.1.0 =
+### 1.1.0
 * Updated tawk.to module config page to use new widget app
 
-= 1.0.0 =
+### 1.0.0
 * Choose desired widget and it will be inserted in your site
-
-== Frequently Asked Questions ==
-
-[FAQ](http://tawk.uservoice.com/knowledgebase)
-
