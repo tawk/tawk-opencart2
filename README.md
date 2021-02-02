@@ -32,6 +32,7 @@ Note: You will need a free tawk.to account to generate the embed code, create on
 
 
 == Changelog ==
+
 = 1.3.0 =
 * Added monitoring of cart item option to tawk.to module config page.
 
