@@ -8,7 +8,7 @@ This module is for Opencart 2.3.x
 
 The tawk.to Live Chat app lets you monitor and chat with visitors on your OpenCart site. Be there when they need you with unlimited messaging, ticketing and your own Knowledge Base — all 100% FREE.
 
-Don’t have an account yet? Create one here: https://tawk.to/?utm_source=opencart&utm_medium=link&utm_campaign=signup
+Don’t have an account yet? [Create one here!](https://tawk.to/?utm_source=opencart&utm_medium=link&utm_campaign=signup)
 
 ## Installation
 This section describes how to install the plugin and get it working.
