@@ -44,6 +44,9 @@ Visit our [Help Center](https://help.tawk.to/) for answers to FAQs
 
 ## Changelog
 
+### 1.4.0
+* Added enable/disable option for visitor recognition feature.
+
 ### 1.3.0
 * Added monitoring of cart item option to tawk.to module config page.
 

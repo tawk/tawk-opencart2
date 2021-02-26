@@ -147,6 +147,21 @@
                                     <?php echo ($display_opts['monitor_customer_cart'])?'checked':'';?>  />
                             </div>
                         </div>
+                        <br><br>
+                        <div class="col-lg-12">
+                            <div class="panel-heading"><strong>Privacy Options</strong></div>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="enable_visitor_recognition" class="col-lg-6 control-label">
+                            Enable Visitor Recognition
+                            <br>
+                            <span class="attrib_desc">Enable sending of customer details to tawk.to dashboard when the customer is logged in.</span>
+                            </label>
+                            <div class="col-lg-6 control-label ">
+                                <input type="checkbox" class="col-lg-6 " name="enable_visitor_recognition" id="enable_visitor_recognition" value="1"
+                                    <?php echo ($display_opts['enable_visitor_recognition'])?'checked':'';?>  />
+                            </div>
+                        </div>
                         <div class="form-group col-lg-12">
                             <div class="col-lg-6 col-xs-12">
                                 <button type="submit" value="1" id="module_form_submit_btn" name="submitBlockCategories" class="btn btn-default pull-right"><i class="process-icon-save"></i> Save</button>

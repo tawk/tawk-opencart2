@@ -32,13 +32,20 @@ class ControllerExtensionModuleTawkto extends Controller {
         $data['customer'] = array();
         $data['orders'] = array();
         $data['can_monitor_customer_cart'] = false;
+        $data['enable_visitor_recognition'] = true; // default
 
         if (!is_null($this->customer->getId())) {
             $data['customer'] = $this->customer;
         }
 
-        if (!is_null($settings) && !is_null($settings->monitor_customer_cart)) {
-            $data['can_monitor_customer_cart'] = $settings->monitor_customer_cart;
+        if (!is_null($settings)) {
+            if (!is_null($settings->monitor_customer_cart)) {
+                $data['can_monitor_customer_cart'] = $settings->monitor_customer_cart;
+            }
+
+            if (!is_null($settings->enable_visitor_recognition)) {
+                $data['enable_visitor_recognition'] = $settings->enable_visitor_recognition;
+            }
         }
 
         return $this->load->view('extension/module/tawkto', $data);

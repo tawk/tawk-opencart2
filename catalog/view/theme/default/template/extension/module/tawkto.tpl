@@ -8,7 +8,7 @@
 ?><!--Start of tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-<?php if (!is_array($customer) && $customer->isLogged()) { ?>
+<?php if (!is_array($customer) && $customer->isLogged() && $enable_visitor_recognition) { ?>
     Tawk_API.visitor = {
         name  : "<?php echo $customer->getFirstName(), ' ' ,$customer->getLastName(); ?>",
         email : "<?php echo $customer->getEmail(); ?>",
