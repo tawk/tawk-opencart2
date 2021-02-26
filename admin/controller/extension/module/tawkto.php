@@ -91,6 +91,7 @@ class ControllerExtensionModuleTawkto extends Controller {
                 'show_oncategory' => false,
                 'show_oncustom' => array(),
                 'monitor_customer_cart' => false,
+                'enable_visitor_recognition' => true
             );
         if (isset($current_settings['tawkto_visibility'])) {
             $options = $current_settings['tawkto_visibility'];
@@ -126,7 +127,8 @@ class ControllerExtensionModuleTawkto extends Controller {
                 'show_oncategory' => false,
                 'show_onproduct' => false,
                 'show_oncustom' => array(),
-                'monitor_customer_cart' => false
+                'monitor_customer_cart' => false,
+                'enable_visitor_recognition' => false
             );
 
         if (isset($_REQUEST['options']) && !empty($_REQUEST['options'])) {
@@ -152,7 +154,8 @@ class ControllerExtensionModuleTawkto extends Controller {
                     case 'show_onproduct':
                     case 'always_display':
                     case 'monitor_customer_cart':
-                        $jsonOpts[$column] = ($value==1)?true:false;
+                    case 'enable_visitor_recognition':
+                        $jsonOpts[$column] = $value == 1;
                         break;
                 }
             }
