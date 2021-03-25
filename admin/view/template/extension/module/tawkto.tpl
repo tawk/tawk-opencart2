@@ -210,8 +210,25 @@ window.addEventListener('message', function(e) {
         if(e.data.action === 'getIdValues') {
             e.source.postMessage({action: 'idValues', values : storeHierarchy}, baseUrl);
         }
+
+        if(e.data.action === 'reloadHeight') {
+            reloadIframeHeight(e.data.height);
+        }
     }
 });
+
+function reloadIframeHeight(height) {
+    if (!height) {
+        return;
+    }
+
+    var iframe = jQuery('#tawkIframe');
+    if (height === iframe.height()) {
+        return;
+    }
+
+    iframe.height(height);
+}
 
 function setTawkWidget(e) {
     var store_layout = e.data.id;
