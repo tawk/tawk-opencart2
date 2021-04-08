@@ -184,7 +184,7 @@
 
 <script>
 var currentHost = window.location.protocol + '//' + window.location.host,
-url = '<?php echo $iframe_url ?>&parentDomain=' + currentHost,
+url = '<?php echo $iframe_url ?>&platform=opencart2&parentDomain=' + currentHost,
 baseUrl = '<?php echo $base_url ?>',
 storeHierarchy = <?php echo json_encode($hierarchy) ?>;
 
