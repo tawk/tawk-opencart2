@@ -184,7 +184,7 @@
 
 <script>
 var currentHost = window.location.protocol + '//' + window.location.host,
-url = '<?php echo $iframe_url ?>&parentDomain=' + currentHost,
+url = '<?php echo $iframe_url ?>&pltf=opencart&pltfv=2&parentDomain=' + currentHost,
 baseUrl = '<?php echo $base_url ?>',
 storeHierarchy = <?php echo json_encode($hierarchy) ?>;
 
@@ -210,8 +210,25 @@ window.addEventListener('message', function(e) {
         if(e.data.action === 'getIdValues') {
             e.source.postMessage({action: 'idValues', values : storeHierarchy}, baseUrl);
         }
+
+        if(e.data.action === 'reloadHeight') {
+            reloadIframeHeight(e.data.height);
+        }
     }
 });
+
+function reloadIframeHeight(height) {
+    if (!height) {
+        return;
+    }
+
+    var iframe = jQuery('#tawkIframe');
+    if (height === iframe.height()) {
+        return;
+    }
+
+    iframe.height(height);
+}
 
 function setTawkWidget(e) {
     var store_layout = e.data.id;

@@ -44,6 +44,10 @@ Visit our [Help Center](https://help.tawk.to/) for answers to FAQs
 
 ## Changelog
 
+### 1.4.1
+* Added function for widget selection iframe to auto resize.
+* Provided platform identifier to widget selection iframe.
+
 ### 1.4.0
 * Added enable/disable option for visitor recognition feature.
 
