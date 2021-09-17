@@ -1,0 +1,52 @@
+version: '3.3'
+
+services:
+  db:
+    image: bitnami/mariadb:10.3-debian-10
+    volumes:
+      - db_data:/bitnami
+    environment:
+      - MARIADB_USER=opencart
+      - MARIADB_DATABASE=opencart
+      - ALLOW_EMPTY_PASSWORD=yes
+
+  web:
+    depends_on:
+      - db
+    build: ./build
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - MARIADB_HOST=db
+      - MARIADB_PORT_NUMBER=3306
+      - OPENCART_DATABASE_USER=opencart
+      - OPENCART_DATABASE_NAME=opencart
+      - OPENCART_USERNAME=admin
+      - OPENCART_PASSWORD=admin
+      - OPENCART_HOST=127.0.0.1
+      - ALLOW_EMPTY_PASSWORD=yes
+    volumes:
+      - web_data:/bitnami
+      - opencart_files:/opt/bitnami/opencart
+      - ./aliases:/bitnami/apache/conf/aliases
+
+  ftpd-server:
+    image: stilliard/pure-ftpd:hardened
+    depends_on:
+      - web
+    ports:
+      - 21:21
+      - 20:20
+      - 30000-30009:30000-30009
+    environment:
+      PUBLICHOST: 0.0.0.0
+      FTP_USER_NAME: test
+      FTP_USER_PASS: test
+      FTP_USER_HOME: /home/test
+    volumes:
+      - opencart_files:/home/test
+volumes:
+  db_data:
+  web_data:
+  opencart_files:
