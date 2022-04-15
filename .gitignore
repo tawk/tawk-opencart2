@@ -1,2 +1,4 @@
 upload/
 *.zip
+/vendor/
+/docker/bin
