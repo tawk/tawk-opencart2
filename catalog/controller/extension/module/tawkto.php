@@ -6,6 +6,10 @@
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
+require_once DIR_SYSTEM . '../vendor/autoload.php';
+
+use Tawk\Modules\UrlPatternMatcher;
+
 class ControllerExtensionModuleTawkto extends Controller {
     private static $displayed = false; //we include embed script only once even if more than one layout is displayed
 
@@ -101,33 +105,15 @@ class ControllerExtensionModuleTawkto extends Controller {
                 $show = false;
 
                 $current_page = (string) $current_page;
-                foreach ($show_pages as $slug) {
-                    $slug = trim($slug);
-                    if (empty($slug)) {
-                        continue;
-                    }
 
-                    // use this when testing on a Linux/Win
-                    // $slug = (string) htmlspecialchars($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                    $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                    $slug = str_ireplace($this->config->get('config_url'), '', $slug);
-
-                    // use this when testing on a Mac
-                    // $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-
-                    $slug = addslashes($slug);
-
-                    // $slug = urlencode($slug);
-                    if (stripos($current_page, $slug)!==false || trim($slug)==trim($current_page)) {
-                        $show = true;
-                        break;
-                    }
+                if (UrlPatternMatcher::match($current_page, $show_pages)) {
+                    $show = false;
                 }
 
                 // category page
                 if (isset($this->request->get['route']) && stripos($this->request->get['route'], 'category')!==false) {
                     if (false!=$visibility->show_oncategory) {
-                        $show = true;
+                        $show = false;
                     }
                 }
 
@@ -152,31 +138,10 @@ class ControllerExtensionModuleTawkto extends Controller {
             } else {
                 $hide_pages = json_decode($visibility->hide_oncustom);
                 $show = true;
-
-                // $current_page = urlencode($current_page);
                 $current_page = (string) $current_page;
-                foreach ($hide_pages as $slug) {
 
-                    $slug = trim($slug);
-                    if (empty($slug)) {
-                        continue;
-                    }
-
-                    // use this when testing on a Linux/Win
-                    // $slug = (string) htmlspecialchars($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                    $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                    $slug = str_ireplace($this->config->get('config_url'), '', $slug);
-
-                    // use this when testing on a Mac
-                    // $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-
-                    $slug = addslashes($slug);
-
-                    // $slug = urlencode($slug);
-                    if (stripos($current_page, $slug)!==false || trim($slug)==trim($current_page)) {
-                        $show = false;
-                        break;
-                    }
+                if (UrlPatternMatcher::match($current_page, $hide_pages)) {
+                    $show = false;
                 }
 
                 if (!$show) {
