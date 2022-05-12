@@ -6,7 +6,9 @@
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-require_once DIR_SYSTEM . '../vendor/autoload.php';
+define('PLUGIN_VERSION', '1.5.0');
+
+require_once DIR_SYSTEM . '../tawkto/vendor/autoload.php';
 
 use Tawk\Modules\UrlPatternMatcher;
 
@@ -14,13 +16,21 @@ class ControllerExtensionModuleTawkto extends Controller {
     private static $displayed = false; //we include embed script only once even if more than one layout is displayed
 
     public function index() {
-
         if(self::$displayed) {
             return;
         }
         self::$displayed = true;
 
-        $widget = $this->getWidget();
+        $this->load->model('setting/setting');
+
+        // get current plugin version in db
+        $tawk_settings = $this->model_setting_setting->getSetting('tawkto'); // this gets the default store settings since that's where the version is stored.
+        $plugin_version_in_db = '';
+        if (isset($tawk_settings['tawkto_version'])) {
+            $plugin_version_in_db = $tawk_settings['tawkto_version'];
+        }
+
+        $widget = $this->getWidget($plugin_version_in_db);
         $settings = json_decode($this->getVisibilitySettings());
 
         if($widget === null) {
@@ -55,9 +65,7 @@ class ControllerExtensionModuleTawkto extends Controller {
         return $this->load->view('extension/module/tawkto', $data);
     }
 
-    private function getWidget() {
-        $this->load->model('setting/setting');
-
+    private function getWidget($plugin_version_in_db) {
         $storeId = $this->config->get('config_store_id');
         $settings = $this->model_setting_setting->getSetting('tawkto', $storeId);
         $languageId = $this->config->get('config_language_id');
@@ -106,8 +114,34 @@ class ControllerExtensionModuleTawkto extends Controller {
 
                 $current_page = (string) $current_page;
 
-                if (UrlPatternMatcher::match($current_page, $show_pages)) {
-                    $show = false;
+                // handle backwards compatibility
+                if (version_compare($plugin_version_in_db, PLUGIN_VERSION) <= 0) {
+                    foreach ($show_pages as $slug) {
+                        $slug = trim($slug);
+                        if (empty($slug)) {
+                            continue;
+                        }
+
+                        // use this when testing on a Linux/Win
+                        // $slug = (string) htmlspecialchars($slug); // we need to add htmlspecialchars due to slashes added when saving to database
+                        $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
+                        $slug = str_ireplace($this->config->get('config_url'), '', $slug);
+
+                        // use this when testing on a Mac
+                        // $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
+
+                        $slug = addslashes($slug);
+
+                        // $slug = urlencode($slug);
+                        if (stripos($current_page, $slug)!==false || trim($slug)==trim($current_page)) {
+                            $show = true;
+                            break;
+                        }
+                    }
+                } else {
+                    if (UrlPatternMatcher::match($current_page, $show_pages)) {
+                        $show = true;
+                    }
                 }
 
                 // category page
@@ -140,8 +174,35 @@ class ControllerExtensionModuleTawkto extends Controller {
                 $show = true;
                 $current_page = (string) $current_page;
 
-                if (UrlPatternMatcher::match($current_page, $hide_pages)) {
-                    $show = false;
+                // handle backwards compatibility
+                if (version_compare($plugin_version_in_db, PLUGIN_VERSION) <= 0) {
+                    foreach ($hide_pages as $slug) {
+
+                        $slug = trim($slug);
+                        if (empty($slug)) {
+                            continue;
+                        }
+
+                        // use this when testing on a Linux/Win
+                        // $slug = (string) htmlspecialchars($slug); // we need to add htmlspecialchars due to slashes added when saving to database
+                        $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
+                        $slug = str_ireplace($this->config->get('config_url'), '', $slug);
+
+                        // use this when testing on a Mac
+                        // $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
+
+                        $slug = addslashes($slug);
+
+                        // $slug = urlencode($slug);
+                        if (stripos($current_page, $slug)!==false || trim($slug)==trim($current_page)) {
+                            $show = false;
+                            break;
+                        }
+                    }
+                } else {
+                    if (UrlPatternMatcher::match($current_page, $hide_pages)) {
+                        $show = false;
+                    }
                 }
 
                 if (!$show) {
@@ -154,8 +215,6 @@ class ControllerExtensionModuleTawkto extends Controller {
     }
 
     private function getVisibilitySettings() {
-        $this->load->model('setting/setting');
-
         $storeId = $this->config->get('config_store_id');
         $settings = $this->model_setting_setting->getSetting('tawkto', $storeId);
         if (!isset($settings['tawkto_visibility'])) {
