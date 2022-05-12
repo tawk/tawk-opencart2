@@ -9,13 +9,14 @@
     "tawk/url-utils": "^2.0"
   },
   "repositories": {
-    "magento": {
-      "type": "composer",
-      "url": "https://repo.magento.com/"
-    },
     "tawk-url-utils": {
       "type": "vcs",
       "url": "https://github.com/tawk/tawk-url-utils.git"
     }
+  },
+  "scripts": {
+    "release" : "composer run build:prod && composer run package",
+    "build:prod" : "composer install --no-dev",
+    "package" : "./build-package.sh"
   }
 }
