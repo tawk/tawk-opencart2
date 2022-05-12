@@ -6,7 +6,7 @@
  * @license GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html
  */
 
-define('PLUGIN_VERSION', '1.5.0');
+define('PATTERN_MATCHING_UPDATE_VERSION', '1.5.0');
 
 require_once DIR_SYSTEM . '../tawkto/vendor/autoload.php';
 
@@ -115,7 +115,7 @@ class ControllerExtensionModuleTawkto extends Controller {
                 $current_page = (string) $current_page;
 
                 // handle backwards compatibility
-                if (version_compare($plugin_version_in_db, PLUGIN_VERSION) <= 0) {
+                if (version_compare($plugin_version_in_db, PATTERN_MATCHING_UPDATE_VERSION) < 0) {
                     foreach ($show_pages as $slug) {
                         $slug = trim($slug);
                         if (empty($slug)) {
@@ -175,7 +175,7 @@ class ControllerExtensionModuleTawkto extends Controller {
                 $current_page = (string) $current_page;
 
                 // handle backwards compatibility
-                if (version_compare($plugin_version_in_db, PLUGIN_VERSION) <= 0) {
+                if (version_compare($plugin_version_in_db, PATTERN_MATCHING_UPDATE_VERSION) < 0) {
                     foreach ($hide_pages as $slug) {
 
                         $slug = trim($slug);
