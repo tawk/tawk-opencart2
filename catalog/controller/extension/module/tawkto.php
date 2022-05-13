@@ -8,7 +8,7 @@
 
 define('PATTERN_MATCHING_UPDATE_VERSION', '1.5.0');
 
-require_once DIR_SYSTEM . '../tawkto/vendor/autoload.php';
+require_once dirname(__FILE__) . '/tawkto/vendor/autoload.php';
 
 use Tawk\Modules\UrlPatternMatcher;
 
