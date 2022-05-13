@@ -8,7 +8,7 @@
 
 define('PLUGIN_VERSION', '1.5.0');
 
-require_once DIR_SYSTEM . '../tawkto/upgrades/manager.php';
+require_once dirname(__FILE__) . '/tawkto/upgrades/manager.php';
 
 class ControllerExtensionModuleTawkto extends Controller {
     private $error = array();

@@ -14,16 +14,8 @@ class TawkToUpgradeVersion150 extends TawkToUpgradeBase {
     const VERSION = '1.5.0';
 
     public static function upgrade($model_setting, $model_store) {
-        $stores = self::get_stores($model_store);
-        foreach ($stores as $store) {
-            $store_id = $store['id'];
-
-            $base_url = parse_url($store['url']);
-            $store_host = $base_url['host'];
-            if (isset($base_url['port'])) {
-                $store_host = $store_host . ':' . $base_url['port'];
-            }
-
+        $store_ids = self::get_store_ids($model_store);
+        foreach ($store_ids as $store_id) {
             $store_settings = $model_setting->getSetting('tawkto', $store_id);
 
             if (!isset($store_settings['tawkto_visibility'])) {
@@ -32,11 +24,11 @@ class TawkToUpgradeVersion150 extends TawkToUpgradeBase {
 
             $visibility = json_decode($store_settings['tawkto_visibility'], true);
             if (!empty($visibility['hide_oncustom'])) {
-                $visibility['hide_oncustom'] = self::process_patterns(json_decode($visibility['hide_oncustom']), $store_host);
+                $visibility['hide_oncustom'] = self::process_patterns(json_decode($visibility['hide_oncustom']));
             }
 
             if (!empty($visibility['show_oncustom'])) {
-                $visibility['show_oncustom'] = self::process_patterns(json_decode($visibility['show_oncustom']), $store_host);
+                $visibility['show_oncustom'] = self::process_patterns(json_decode($visibility['show_oncustom']));
             }
 
             $store_settings['tawkto_visibility'] = json_encode($visibility);
@@ -45,7 +37,7 @@ class TawkToUpgradeVersion150 extends TawkToUpgradeBase {
         }
     }
 
-    protected static function process_patterns($pattern_list, $store_host) {
+    protected static function process_patterns($pattern_list) {
         $wildcard = PathHelper::get_wildcard();
 
         if (self::check_pattern_list_has_wildcard($pattern_list, $wildcard)) {
@@ -71,7 +63,7 @@ class TawkToUpgradeVersion150 extends TawkToUpgradeBase {
                 // If not, add a leading / so that the pattern
                 // matcher treats is as a path.
                 $firstPatternChunk = explode('/', $pattern)[0];
-                if ($firstPatternChunk !== $store_host) {
+                if (self::check_valid_host($firstPatternChunk) === false) {
                     $pattern = '/' . $pattern;
                 }
             }
@@ -104,20 +96,30 @@ class TawkToUpgradeVersion150 extends TawkToUpgradeBase {
         return false;
     }
 
-    protected static function get_stores($model_store) {
+    protected static function check_valid_host($host) {
+        // contains port
+        if (strpos($host, ':') < 0) {
+            return true;
+        }
+
+        // is localhost
+        if (strpos($host, 'localhost') === 0) {
+            return true;
+        }
+
+        // gotten from https://forums.digitalpoint.com/threads/what-will-be-preg_match-for-domain-names.1953314/#post-15036873
+        // but updated the ending regex part to include numbers so it also matches IPs.
+        $host_check_regex = '/^[a-zA-Z0-9]*((-|\.)?[a-zA-Z0-9])*\.([a-zA-Z0-9]{1,4})$/';
+
+        return preg_match($host_check_regex, $host) > 0;
+    }
+
+    protected static function get_store_ids($model_store) {
         $retrieved_stores = $model_store->getStores();
-        $stores = array(
-            array(
-                'id' => 0,
-                'url' => HTTP_SERVER // TODO: figure out how to retrieve store url
-            )
-        );
+        $stores = array(0);
 
         foreach ($retrieved_stores as $store) {
-            array_push($stores, array(
-                'id' => $store['store_id'],
-                'url' => $store['url']
-            ));
+            array_push($stores, $store['store_id']);
         };
 
         return $stores;
