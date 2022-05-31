@@ -3,9 +3,7 @@
 release_version=$(jq -r '.version' ./composer.json);
 
 echo "Creating temporary directory"
-rm -rf ./tmp/admin;
-rm -rf ./tmp/catalog;
-rm -rf ./tmp/upload;
+rm -rf ./tmp;
 mkdir -p ./tmp/upload;
 mkdir -p ./tmp/admin/controller/extension/module/tawkto;
 mkdir -p ./tmp/catalog/controller/extension/module/tawkto;

@@ -114,40 +114,14 @@ class ControllerExtensionModuleTawkto extends Controller {
 
                 $current_page = (string) $current_page;
 
-                // handle backwards compatibility
-                if (version_compare($plugin_version_in_db, PATTERN_MATCHING_UPDATE_VERSION) < 0) {
-                    foreach ($show_pages as $slug) {
-                        $slug = trim($slug);
-                        if (empty($slug)) {
-                            continue;
-                        }
-
-                        // use this when testing on a Linux/Win
-                        // $slug = (string) htmlspecialchars($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                        $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                        $slug = str_ireplace($this->config->get('config_url'), '', $slug);
-
-                        // use this when testing on a Mac
-                        // $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-
-                        $slug = addslashes($slug);
-
-                        // $slug = urlencode($slug);
-                        if (stripos($current_page, $slug)!==false || trim($slug)==trim($current_page)) {
-                            $show = true;
-                            break;
-                        }
-                    }
-                } else {
-                    if (UrlPatternMatcher::match($current_page, $show_pages)) {
-                        $show = true;
-                    }
+                if ($this->matchPatterns($current_page, $show_pages, $plugin_version_in_db)) {
+                    $show = true;
                 }
 
                 // category page
                 if (isset($this->request->get['route']) && stripos($this->request->get['route'], 'category')!==false) {
                     if (false!=$visibility->show_oncategory) {
-                        $show = false;
+                        $show = true;
                     }
                 }
 
@@ -164,50 +138,18 @@ class ControllerExtensionModuleTawkto extends Controller {
                     }
                 }
 
-
-                if (!$show) {
-                    return;
-                }
-
             } else {
                 $hide_pages = json_decode($visibility->hide_oncustom);
                 $show = true;
                 $current_page = (string) $current_page;
 
-                // handle backwards compatibility
-                if (version_compare($plugin_version_in_db, PATTERN_MATCHING_UPDATE_VERSION) < 0) {
-                    foreach ($hide_pages as $slug) {
-
-                        $slug = trim($slug);
-                        if (empty($slug)) {
-                            continue;
-                        }
-
-                        // use this when testing on a Linux/Win
-                        // $slug = (string) htmlspecialchars($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                        $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                        $slug = str_ireplace($this->config->get('config_url'), '', $slug);
-
-                        // use this when testing on a Mac
-                        // $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-
-                        $slug = addslashes($slug);
-
-                        // $slug = urlencode($slug);
-                        if (stripos($current_page, $slug)!==false || trim($slug)==trim($current_page)) {
-                            $show = false;
-                            break;
-                        }
-                    }
-                } else {
-                    if (UrlPatternMatcher::match($current_page, $hide_pages)) {
-                        $show = false;
-                    }
+                if ($this->matchPatterns($current_page, $hide_pages, $plugin_version_in_db)) {
+                    $show = false;
                 }
+            }
 
-                if (!$show) {
-                    return;
-                }
+            if (!$show) {
+                return;
             }
         }
 
@@ -234,5 +176,25 @@ class ControllerExtensionModuleTawkto extends Controller {
         $this->load->model('design/layout');
 
         return $this->model_design_layout->getLayout($route);
+    }
+
+    private function matchPatterns($current_page, $pages, $plugin_version) {
+        // handle backwards compatibility
+        if (version_compare($plugin_version, PATTERN_MATCHING_UPDATE_VERSION) < 0) {
+            foreach ($pages as $slug) {
+                $slug = trim($slug);
+                if (empty($slug)) {
+                    continue;
+                }
+
+                $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
+                $slug = str_ireplace($this->config->get('config_url'), '', $slug);
+                $slug = addslashes($slug);
+
+                return stripos($current_page, $slug)!==false || trim($slug)==trim($current_page);
+            }
+        }
+
+        return UrlPatternMatcher::match($current_page, $pages);
     }
 }
