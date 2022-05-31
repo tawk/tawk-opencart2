@@ -182,22 +182,26 @@ class ControllerExtensionModuleTawkto extends Controller {
     }
 
     private function matchPatterns($current_page, $pages, $plugin_version) {
+        if (version_compare($plugin_version, PATTERN_MATCHING_UPDATE_VERSION) >= 0) {
+            return UrlPatternMatcher::match($current_page, $pages);
+        }
+
         // handle backwards compatibility
-        if (version_compare($plugin_version, PATTERN_MATCHING_UPDATE_VERSION) < 0) {
-            foreach ($pages as $slug) {
-                $slug = trim($slug);
-                if (empty($slug)) {
-                    continue;
-                }
+        foreach ($pages as $slug) {
+            $slug = trim($slug);
+            if (empty($slug)) {
+                continue;
+            }
 
-                $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
-                $slug = str_ireplace($this->config->get('config_url'), '', $slug);
-                $slug = addslashes($slug);
+            $slug = (string) urldecode($slug); // we need to add htmlspecialchars due to slashes added when saving to database
+            $slug = str_ireplace($this->config->get('config_url'), '', $slug);
+            $slug = addslashes($slug);
 
-                return stripos($current_page, $slug)!==false || trim($slug)==trim($current_page);
+            if (stripos($current_page, $slug)!==false || trim($slug)==trim($current_page)) {
+                return true;
             }
         }
 
-        return UrlPatternMatcher::match($current_page, $pages);
+        return false;
     }
 }
