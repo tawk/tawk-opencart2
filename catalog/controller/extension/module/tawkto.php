@@ -138,6 +138,9 @@ class ControllerExtensionModuleTawkto extends Controller {
                     }
                 }
 
+                if (!$show) {
+                    return;
+                }
             } else {
                 $hide_pages = json_decode($visibility->hide_oncustom);
                 $show = true;
@@ -146,10 +149,10 @@ class ControllerExtensionModuleTawkto extends Controller {
                 if ($this->matchPatterns($current_page, $hide_pages, $plugin_version_in_db)) {
                     $show = false;
                 }
-            }
 
-            if (!$show) {
-                return;
+                if (!$show) {
+                    return;
+                }
             }
         }
 
