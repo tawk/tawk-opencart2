@@ -26,9 +26,11 @@ This section describes how to install the plugin and get it working.
 > If you aren’t using the English language for the OpenCart admin area, copy the language file into the correct language folder. If you are not using the default OpenCart theme, be sure to paste tawkto.tpl in the correct theme folder.
 
 * admin/controller/extension/module/tawkto.php -> `<opencart_folder>`/admin/controller/extension/module/
+* admin/controller/extension/module/tawkto/ -> `<opencart_folder>`/admin/controller/extension/module/
 * admin/language/english/extension/module/tawkto.php -> `<opencart_folder>`/admin/language/`<your_language>`/extension/module/
 * admin/view/image/tawkto/ -> `<opencart_folder>`/admin/view/image/
 * admin/view/template/extension/module/tawkto.tpl -> `<opencart_folder>`/admin/view/template/extension/module/
+* admin/view/template/extension/module/tawkto/ -> `<opencart_folder>`/admin/view/template/extension/module/
 * catalog/controller/extension/module/tawkto.php -> `<opencart_folder>`/catalog/controller/extension/module/tawkto.php
 * catalog/view/theme/default/template/extension/module/tawkto.tpl -> `<opencart_folder>`/catalog/view/theme/`<your_theme>`/template/extension/module/tawkto.tpl
 
@@ -43,6 +45,9 @@ This section describes how to install the plugin and get it working.
 Visit our [Help Center](https://help.tawk.to/) for answers to FAQs
 
 ## Changelog
+
+### 1.5.0
+* Enhanced pattern matching for filtering pages to show/hide widgets.
 
 ### 1.4.1
 * Added function for widget selection iframe to auto resize.
