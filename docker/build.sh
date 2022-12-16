@@ -12,9 +12,11 @@ fi
 echo "Creating module folder";
 mkdir -p $module_dir;
 
+echo "Install dependencies"
+composer run release --working-dir=$build_dir/..
+
 echo "Copying files to module folder";
-cp -r $build_dir/../admin $module_dir
-cp -r $build_dir/../catalog $module_dir
+cp -r $build_dir/../tmp/* $module_dir
 
 echo "Done building module folder";
 
