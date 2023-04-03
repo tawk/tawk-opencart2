@@ -1,3 +1,5 @@
 upload/
 *.zip
-docker/bin
+/vendor
+/docker/bin
+/tmp

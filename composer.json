@@ -1,0 +1,22 @@
+{
+  "name": "tawk/tawk-opencart2",
+  "description": "tawk.to extension module for Opencart 2.",
+  "version": "1.5.0",
+  "type": "project",
+  "license": "GPL3",
+  "require": {
+    "php": ">=5.6.0",
+    "tawk/url-utils": "^2.0"
+  },
+  "repositories": {
+    "tawk-url-utils": {
+      "type": "vcs",
+      "url": "https://github.com/tawk/tawk-url-utils.git"
+    }
+  },
+  "scripts": {
+    "release" : "composer run build:prod && composer run package",
+    "build:prod" : "composer install --no-dev",
+    "package" : "./build-package.sh"
+  }
+}
