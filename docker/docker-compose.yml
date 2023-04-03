@@ -13,7 +13,7 @@ services:
   web:
     depends_on:
       - db
-    build: ./build
+    build: .
     ports:
       - 80:80
       - 443:443
@@ -29,7 +29,7 @@ services:
     volumes:
       - web_data:/bitnami
       - opencart_files:/opt/bitnami/opencart
-      - ./aliases:/bitnami/apache/conf/aliases
+      - ./assets/multistore.conf:/bitnami/apache/conf/aliases/multistore.conf
 
   ftpd-server:
     image: stilliard/pure-ftpd:hardened
