@@ -161,8 +161,13 @@ class ControllerExtensionModuleTawkto extends Controller {
                         $value = urldecode($value);
                         $value = str_ireplace(["\r\n", "\r", "\n"], ',', $value);
                         $value = explode(",", $value);
-                        $value = (empty($value)||!$value)?array():$value;
-                        $jsonOpts[$column] = json_encode($value);
+                        $non_empty_values = array();
+                        foreach ($value as $str) { 
+                            if (!is_null($str) && $str !== '') {
+                                $non_empty_values[] = $str;
+                            }
+                        }
+                        $jsonOpts[$column] = json_encode($non_empty_values);
                         break;
 
                     case 'show_onfrontpage':
