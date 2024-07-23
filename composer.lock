@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "156787f2e70353ec3bb38d86396e2837",
+    "content-hash": "36cfef846c4e38c2788c215cffbb50a1",
     "packages": [
         {
             "name": "tawk/url-utils",
@@ -66,5 +66,5 @@
         "php": ">=5.6.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.6.0"
 }
