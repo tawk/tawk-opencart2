@@ -46,6 +46,9 @@ Visit our [Help Center](https://help.tawk.to/) for answers to FAQs
 
 ## Changelog
 
+### 1.5.1
+* Fix home route excluded from show/hide rules
+
 ### 1.5.0
 * Enhanced pattern matching for filtering pages to show/hide widgets.
 
